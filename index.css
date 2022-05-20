@@ -1,0 +1,147 @@
+/* Common */ 
+
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital@1&family=IBM+Plex+Mono&family=Maven+Pro:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap');
+
+* {
+	margin:0;
+	padding:0;
+	color:#616161;
+	font-family: 'Playfair Display', sans-serif;
+	box-sizing: border-box;
+}
+
+/* Header */ 
+
+ul {
+	list-style: none;
+}
+
+li {
+	text-decoration: none;
+	outline: none;
+}
+
+.container {
+	width:1400px;
+	margin:0 auto;
+}
+
+header {
+	width:100%;
+	height:80px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+header > h2 {
+	margin-left:20px;
+}
+
+header > nav {
+	width:600px;
+	height:100%;
+}
+
+header ul {
+	width:100%;
+	height: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+header ul > li {
+	font-size:20px;
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+header ul > li:hover {
+	color:#000;
+    transform: scale(1.1);
+    cursor: pointer;
+	text-decoration: underline;
+}
+
+/* Section */ 
+
+.fn-font {
+	font-family: 'Playfair Display', sans-serif;
+}
+
+#visual {
+	background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),url(./img/bgImg.png);
+	background-size: cover;
+	background-position: 0% 20%;
+	width:100%;
+	height:700px;
+    display: flex;
+	justify-content: center;
+	align-items: center;
+    flex-direction: column;
+}
+
+#visual * {
+	color:white;
+}
+
+.typingEffect {
+	font-size: 20px;
+	min-width:11px;
+	white-space: nowrap;
+	margin: 0;
+	position: fixed;
+	color: transparent;
+	top:50%;
+	left:50%;
+	transform: translate(-50%, -50%);
+  }
+  
+  .typingEffect::before {
+	content: "Typing Effect with CSS";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	color: black;
+	overflow: hidden;
+	border-right: 1px solid black;
+	animation: typing 5s steps(31) infinite;
+  }
+  
+  @keyframes typing{
+	0% {
+	  width: 0%;
+	}
+	50% {
+	  width: 100%;
+	}
+	100% {
+	  width: 0%;
+	}
+  }
+
+#visual h2 {
+	font-size:60px;
+}
+
+#visual p {
+	margin: 30px;
+}
+
+.btn {	
+	width:200px;
+	padding: 8px 12px;
+	border:2px solid #ddd;
+	background-color: #757575;
+	border-radius: 5px;
+    opacity:0.8;
+    cursor: pointer;
+}
+
+.btn:hover {
+	background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
+}
+
