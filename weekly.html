@@ -1,26 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>오늘의 옷</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘의 옷</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="cheatSheet.css">
+  <style>
+    /*.center {
+      width: 1460px;
+      height: 690px;
+      background-repeat: no-repeat;
+      position: absolute;
+      background-position: 60px 0px;
+      background-image: url(./img/bgweekly.jpeg);
+    }*/
+
+    .center {
+	background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),url(./img/bgweekly.jpeg);
+	background-size: cover;
+	background-position: 0% 20%;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 1400px;
+	height:700px;
+    display: flex;
+	justify-content: center;
+	align-items: center;
+    flex-direction: column;
+}
+
+    .button_present {
+      position: absolute;
+      border-radius: 5px;
+      width: 200px;
+      padding: 8px 12px;
+      top: 230px;
+      left: 1000px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+
+    .button_anything {
+      position: absolute;
+      border-radius: 5px;
+      width: 200px;
+      padding: 8px 12px;
+      top: 300px;
+      left: 1000px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+    }
+
+    .button_present {
+      background-color: white;
+      color: black;
+      border: 2px solid #B8DAE3;
+    }
+
+    .button_present:hover {
+      background-color: #B8DAE3;
+      color: white;
+    }
+
+    .button_anything {
+      background-color: white;
+      color: black;
+      border: 2px solid #EFD7AD;
+    }
+
+    .button_anything:hover {
+      background-color: #EFD7AD;
+      color: white;
+    }
+
+    .com {
+      position: absolute;
+      border-radius: 5px;
+      top: 500px;
+      left: 1000px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      display: none;
+    }
+
+
+    select {
+      width: 200px;
+      height: 40px;
+      text-align: center;
+      top: 500px;
+      left: 1000px;
+      border: 2px solid #999;
+      font-family: 'Nanumgothic';
+      border-radius: 3px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    .city_find {
+      position: absolute;
+      border-radius: 50px;
+      width: 50px;
+      height: 50px;
+      top: 500px;
+      left: 1250px;
+      background-color: white;
+      color: black;
+      border: 2px solid #FFCBCB;
+      display: none;
+
+    }
+
+    .city_find:hover {
+      background-color: #FFCBCB;
+      color: white;
+    }
+
+    .p_tag {
+      color: white;
+      top: 200px;
+      left: 300px;
+      position: absolute;
+      font-size: 38px;
+      font-family: 'Nanum Myeongjo', serif;
+    }
+  </style>
+  <script>
+    //현재 위치 불러오기
+    $(document).ready(function () {
+      getLocation();
+    });
+    //지정위치 버튼 클릭시 컴보박스 나타나기
+    $(function () {
+      $('.button_anything').click(function () {
+        if ($(".com").css("display") == "none") {
+          $('.com').show();
+        }
+        if ($(".city_find").css("display") == "none") {
+          $('.city_find').show();
+        }
+      });
+    });
+    //선택된 값을 내보내기
+    function handleOnChange(e) {
+      // 선택된 데이터 가져오기
+      const value = e.value;
+      if (localStorage) {
+        localStorage.setItem("value_", value);
+        // alert(localStorage.getItem("value_"));
+      } else {
+        alert("Sorry, your browser do not support local storage.");
+      }
+    }
+  </script>
 </head>
+
 <body>
-        <!-- Header -->
-	<div class="container">
-		<header>
-			<h2>오늘의 옷</h2>
-			<nav>
-				<ul>
-					<li onClick="location.href='index.html'">HOME</li>
-					<li onClick="location.href='daily.html'">DAILY</li>
-					<li onClick="location.href='weekly.html'">WEEKLY</li>
-					<li onClick="location.href='trends.html'">2022 S/S FASHION TRENDS</li>
-				</ul>
-			</nav>
-		</header>
-        위클리 페이지
+  <div class="container">
+    <header>
+        <img src="./img/logo.png" width="130" style="padding-left:5px;">
+      <nav>
+        <ul>
+          <li onClick="location.href='index.html'">HOME</li>
+          <li onClick="location.href='daily.html'">DAILY</li>
+          <li onClick="location.href='weekly.html'">WEEKLY</li>
+          <li onClick="location.href='trends.html'">2022 S/S FASHION TRENDS</li>
+        </ul>
+      </nav>
+    </header>
+  </div>
+  <div class="center">
+
+    <p class="p_tag fadeIn">이번주는 대체적으로 어떤 날씨일까?<br />날씨에 맞는 옷차림을 추천해드려요.</p>
+    <button class="button_present fadeIn" , onClick="location.href='weekly_hyun.html'">현재위치</button>
+    <button class="button_anything fadeIn">지정위치</button>
+    <p id="longitude_latitude"></p>
+    <script id='lat_long'>
+      //var x=document.getElementById("longitude_latitude");
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+          x.innerHTML = "실패.";
+        }
+      }
+      function showPosition(position) {
+        var lat_ = String(position.coords.latitude);
+        var lat_split = lat_.split(".");
+        var lat_ = lat_split[0];
+        var long_ = String(position.coords.longitude);
+        var long_split = long_.split(".");
+        var long_ = long_split[0];
+        //x.innerHTML="위도: "+lat_+"<br>경도: "+long_; 
+        if (localStorage) {
+          localStorage.setItem("lat_", lat_);
+          localStorage.setItem("long_", long_);
+          /*alert(localStorage.getItem("lat_"));
+          alert(localStorage.getItem("long_"));*/
+        } else {
+          alert("Sorry, your browser do not support local storage.");
+        }
+      }
+      function showError(error) {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            x.innerHTML = "사용자 거부";
+            break;
+          case error.POSITION_UNAVAILAVLE:
+            x.innerHTML = "위치 정보 사용 불가";
+            break;
+          case error.TIMEOUT:
+            x.innerHTML = "시간 초과";
+            break;
+          case error.UNKNOWN_ERROR:
+            x.innerHTML = "알 수 없는 오류가 발생";
+            break;
+        }
+      }
+
+    </script>
+  </div>
+  <div class="com">
+    <select name="select_city" onchange="handleOnChange(this)">
+      <option value="none">-도시선택-</option>
+      <option value="서울">서울</option>
+      <option value="춘천">춘천</option>
+      <option value="강릉">강릉</option>
+      <option value="대전">대전</option>
+      <option value="청주">청주</option>
+      <option value="대구">대구</option>
+      <option value="전주">전주</option>
+      <option value="광주">광주</option>
+      <option value="부산">부산</option>
+      <option value="제주">제주</option>
+      <option value="중국-베이징">중국-베이징</option>
+      <option value="미국-워싱턴">미국-워싱턴</option>
+      <option value="영국-런던">영국-런던</option>
+      <option value="네팔-카트만두">네팔-카트만두</option>
+      <option value="동티모르-딜리">동티모르-딜리</option>
+      <option value="태국-방콕">태국-방콕</option>
+      <option value="말레이시아-쿠알라룸푸르">말레이시아-쿠알라룸푸르</option>
+      <option value="몰디브-말레">몰디브-말레</option>
+      <option value="라오스-비엔티안">라오스-비엔티안</option>
+      <option value="레바논-베이루트">레바논-베이루트</option>
+      <option value="몽골-울란바토르">몽골-울란바토르</option>
+      <option value="미얀마-네피도">미얀마-네피도</option>
+      <option value="방글라데시-다카">방글라데시-다카</option>
+      <option value="베트남-하노이">베트남-하노이</option>
+      <option value="부탄-팀부">부탄-팀부</option>
+      <option value="브루나이-반다르스리브가완">대전브루나이-반다르스리브가완</option>
+      <option value="사우디아라비아-리야드">사우디아라비아-리야드</option>
+      <option value="시리아-다마스쿠스">시리아-다마스쿠스</option>
+      <option value="싱가포르">싱가포르</option>
+      <option value="아르메니아-예레반">아르메니아-예레반</option>
+      <option value="아제르바이잔-바쿠">아제르바이잔-바쿠</option>
+      <option value="아프가니스탄-카불">아프가니스탄-카불</option>
+      <option value="예멘-사나">예멘-사나</option>
+      <option value="오만-무스카트">오만-무스카트</option>
+      <option value="요르단-암만">요르단-암만</option>
+      <option value="우즈베키스탄-타슈켄트">우즈베키스탄-타슈켄트</option>
+      <option value="이라크-바그다드">이라크-바그다드</option>
+      <option value="이란-테헤란">이란-테헤란</option>
+      <option value="이스라엘-서예루살렘">이스라엘-서예루살렘</option>
+      <option value="인도-뉴델리">인도-뉴델리</option>
+      <option value="인도네시아-자카르타">인도네시아-자카르타</option>
+      <option value="일본-도쿄">일본-도쿄</option>
+      <option value="조지아-트빌리시">조지아-트빌리시</option>
+      <option value="캄보디아-프놈펜">캄보디아-프놈펜</option>
+      <option value="터키-앙카라">터키-앙카라</option>
+      <option value="필리핀-마닐라">필리핀-마닐라</option>
+    </select>
+
+
+  </div>
 </body>
+
 </html>

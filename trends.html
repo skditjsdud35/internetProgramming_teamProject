@@ -5,13 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>오늘의 옷</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="trends.css">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+	<link rel="stylesheet" type="text/css" href="cheatSheet.css">
+	<script>
+	$(function() {  
+		$(window).scroll(function() { 
+			if ($(this).scrollTop() > 1000) { 
+				 $('#topBtn').fadeIn(); 
+				} else { 
+					$('#topBtn').fadeOut(); 
+				} 
+			}); 
+			// 버튼 클릭시 
+		$("#topBtn").click(function() { 
+			$('html, body').animate({ scrollTop : 0 
+				 }, 400); // 속도 400 
+				 return false; 
+			}); 
+	});
+	</script>
 </head>
 <body>
         <!-- Header -->
-	<div class="container">
+	<div class="container" id="header">
 		<header>
-			<h2>오늘의 옷</h2>
+			<img src="./img/logo.png" width="130" style="padding-left:5px;">
 			<nav>
 				<ul>
 					<li onClick="location.href='index.html'">HOME</li>
@@ -21,6 +40,186 @@
 				</ul>
 			</nav>
 		</header>
-        트렌드 페이지
+	
+
+		<div class="main_text0">
+			<h1 class="fadeIn">2022 S/S 패션 트렌드</h1>
+			<div class="contents1 fadeIn">최신 유행을 알려드립니다.</div>
+			
+			<ul class="icons fadeIn">
+				<li>
+				  <div class="icon_img">
+					<img src="./img/color_icon.png" width="120px" height="120px" alt="컬러아이콘">
+				  </div>
+				  <div class="contents1_bold">올해의 컬러</div>
+				  <div class="contents2">
+					  팬톤에서 선정한 <br>
+					  올해의 컬러를 알려드립니다.
+				  </div>
+				  <div class="more">
+					<a href="#link_main_text1">MORE</a>
+				  </div>
+				</li>
+
+				<li>
+					<div class="icon_img">
+					  <img src="./img/item_icon.png" width="120px" height="120px" alt="트렌드아이콘">
+					</div>
+					<div class="contents1_bold">s/s시즌 트렌드</div>
+					<div class="contents2">
+						2022 s/s시즌<br>
+						 올해의 트렌드 아이템을 알려드립니다.
+					</div>
+					<div class="more">
+					  <a href="#link_main_text2">MORE</a>
+					</div>
+				  </li>
+		
+			</div>
+
+			<div class="main_text1" id="link_main_text1">
+				<h1>COLOR</h1>
+				<div class="contents1">팬톤에서 선정한 올해의 컬러</div>
+				<div class="trend_color">
+				  <div class="color_photo">
+					<img src="./img/trends_color.png" width="300px" height="300px" alt="올해의 컬러">
+				  </div>
+				  <div class="veryperi_photo">
+					<img src="./img/veryperi.jpg" width="300px" height="300px" alt="올해의 컬러_베리페리">
+				  </div>
+				  <div class="contents2">
+					  <h2>PANTONE 17-3938 Very Peri (베리페리)</h2>
+					  블루스의 특성을 아우르는 동시에 바이올렛 레드 색조의 저음을 지닌<br>
+					 PANTONE 17-3938 Very Peri는 용기 있는 창조성과<br>
+					 상상력 있는 표현을 장려하는 경쾌하고 즐거운 태도와 역동적인 존재감을 보여준다.<br><br>
+					  
+					  "전례없는 변화의 세계로 나아가면서, 팬톤 17-1938의 선정"<br>
+						'베리 페리'는 블루스의 자질을 아우르며 신뢰받고 사랑받는<br>
+						 블루컬러 계열의 참신한 시각과 비전을 가져오지만, <br>
+						바이올렛 레드 언더톤과 함께 '팬톤 17-3938'은 씩씩하고 즐거운 태도와<br>
+						 역동적인 존재감을 발휘해 용기 있는 창의력과 상상력을 북돋운다.<br><br>
+				  </div>
+				  
+				</div>
+			  </div>
+
+			  <div class="main_text2" id="link_main_text2">
+				<h1>TREND ITEM</h1>
+				<div class="contents1">2022 올해의 트렌드 아이템</div>
+				  <div class="contents2">
+					<h1> "2000년대 초반의 유행이 돌아오다"  </h1>
+					<h4>패션 트렌드는 Y2K!</h4> 
+					<div class="section">
+						<input type="radio" name="slide" id="slide01" checked>
+						<input type="radio" name="slide" id="slide02">
+						<input type="radio" name="slide" id="slide03">
+						
+						<div class="slidewrap">
+							<ul class="slidelist">
+								<li>
+									<a>
+										<label for="slide03" class="left"></label>
+										<img src="./img/Y2K.png" width="800px" height="500px">
+										<label for="slide02" class="right"></label>
+									</a>
+								</li>
+
+								<li>
+									<a>
+										<label for="slide01" class="left"></label>
+										<img src="./img/Y2K_1.jpg" width="800px" height="500px">
+										<label for="slide03" class="right"></label>
+									</a>
+								</li>
+
+								<li>
+									<a>
+										<label for="slide02" class="left"></label>
+										<img src="./img/Y2K_2.jpg" width="800px" height="500px">
+										<label for="slide01" class="right"></label>
+									</a>
+								</li>
+							</ul>
+						</div>
+						
+					</div>
+				  </div>
+				</div>
+				<div class="main_text3">
+					<div class="contents2">
+						<h2> 1. Low Waist(짧은 밑위)  </h2>
+						<p>하의의 밑 위가 점점 낮아지고 있다.</p>
+						<img src="./img/lowwaist.jpg" width="800px" height="500px">
+	
+						<h2> 2. Micro Skirt(짧은 치마)  </h2>
+						<p>흔히 말하는 미니스커트</p>
+						<img src="./img/miniskirt.jpg" width="800px" height="500px">
+	
+						<h2> 3. Cargo Pants(카고 팬츠)  </h2>
+						<p>소재를 변형하는 등의 아이템도 많이 나오고 있다.</p>
+						<img src="./img/cargopants.jpg" width="800px" height="500px">
+	
+						<h2> 4. Platform Shoes(플랫폼 슈즈, 통굽)  </h2>
+						<p>밑창 전체를 높게 한 구두</p>
+						<img src="./img/platformshoes.jpg" width="800px" height="500px">
+						
+						<h2> 5. Rider Jacket(라이더 자켓)  </h2>
+						<p>모터 사이클에서 기반된 가죽 아이템들</p>
+						<img src="./img/Riderjacket.jpg" width="800px" height="500px">
+	
+						<h2> 6. Colorful item  </h2>
+						<p>화려한 색상의 옷과 아이템들이 유행</p>
+						<img src="./img/colorful_item.jpg" width="800px" height="500px">
+	
+						<h2> 7. Cargo Pants(카고 팬츠)  </h2>
+						<p>소재를 변형하는 등의 아이템도 많이 나오고 있다.</p>
+						<img src="./img/cargopants.jpg" width="800px" height="500px">
+	
+						<h2> 8. Big Frame Sunglasses(빅 프레임 선글라스)  </h2>
+						<p>아크네 스튜디오나 발렌시아가 같은 힙한 브랜드에서 선보인 제품</p>
+						<img src="./img/big_Frame.jpg" width="750px" height="800px">
+	
+						<h2> 9.XXL SIZE BLAZER(오버사이즈 재킷)  </h2>
+						<p>오버사이즈 재킷에 화려한 패턴이나 색상을 더해 다채로워졌다.</p>
+						<img src="./img/oversize_blazer.jpg" width="750px" height="800px">
+	
+						<h2> 10. Metal Strap(메탈 스트랩)  </h2>
+						<p>지방시를 필두로 브랜드 이니셜과 팬던트를 달아 Y2K 분위기를 형성</p>
+						<img src="./img/metalstrap.jpg" width="800px" height="550px">
+					  </div>
+				</div>
+			
+
+			   <div class="main_text4">
+				<ul>
+				  <li>
+					<div><h1>CONTACT</h1></div>
+					<div>우리와 함께 나아갈 기업/ 고객을 찾고 있습니다.</div>
+					<div class="more2">더 알아보기</div>
+				  </li>
+				  <li>
+					
+				  </li>
+				</ul>
+			  </div>
+		
+			  <div class="footer">
+				<div>
+					<img src="./img/logo.png" width="120px" height="120px">
+				</div>
+				<div>
+				  CEO. 오늘의 옷(IP-TEAM7) <br>
+				  Addr. 경기도 용인시 처인구 명지로 116 <br>
+				  02 - XXX -XXXX <br>
+				  COPYRIGHT 2022. IP-TEAM7. ALL RIGHT RESERVED.
+				</div>
+			  </div>
+
+
+	</div>
+	
+	<a id="topBtn" href="#header" ><img src="./img/top_icon.png" width="70px" height="70px" title="위로 이동"></a>
+	
+
 </body>
 </html>

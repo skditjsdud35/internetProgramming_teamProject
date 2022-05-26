@@ -3,16 +3,396 @@
 <head>
     <meta charset="UTF-8">
     <title>오늘의 옷</title>
+    <link rel="shortcut icon" href="#">
     <link rel="stylesheet" type="text/css" href="daily.css">
     <link rel="stylesheet" type="text/css" href="cheatSheet.css">
-    <script src="daily.js"></script> 
-    <!--<script src="weekly.js"></script> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <script>
+
+    const getJSON = function(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      const status = xhr.status;
+      if (status === 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status, xhr.response);
+      }
+    };
+    xhr.send();
+    };
+
+    getJSON(`http://api.openweathermap.org/data/2.5/weather?q=seoul&appid=92e1a79652b2d6263924d1f105522a8c&units=metric`,
+        function(err, data) {
+        if (err !== null) {
+            alert('죄송합니다. 예상치 못한 오류가 발생했습니다. ' + err);
+        } else {        
+            loadWeather(data);
+            loadImg(data);
+            dailyClothes(data);
+        }
+    });
+
+    function selectedControl(){
+        
+        let locationSelect = document.getElementById('select-location');  //select box
+        let selectValue = locationSelect.options[locationSelect.selectedIndex].value; 
+        let selectText = locationSelect.options[locationSelect.selectedIndex].text;
+
+        getJSON(`http://api.openweathermap.org/data/2.5/weather?q=${selectValue}&appid=92e1a79652b2d6263924d1f105522a8c&units=metric`,
+        function(err, data) {
+        if (err !== null) {
+            alert('죄송합니다. 예상치 못한 오류가 발생했습니다. ' + err);
+        } else {
+            loadWeather(data);
+            loadImg(data);
+            dailyClothes(data);
+            
+        }
+    });
+    }
+
+    //날씨 받아오기
+    function loadWeather(data) {
+
+        let location = document.querySelector(".location");
+        let currentTime = document.querySelector(".current-time");
+        let currentTemp = document.querySelector(".current-temp");
+        let feelsLike = document.querySelector(".feels-like");
+        let minTemp = document.querySelector(".min-temp");
+        let maxTemp = document.querySelector(".max-temp");
+        let icon = document.querySelector(".icon");
+        let weatherIcon = data.weather[0].icon;
+
+        let date = new Date();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+
+        //초기화
+        $(".location").empty();
+        $(".feels-like").empty();
+        $(".max-temp").empty();
+        $(".min-temp").empty();
+        $(".current-time").empty();
+
+        location.append(`의 현재 온도는 ${(data.main.temp).toFixed(1)}도 입니다`);
+        //currentTemp.append(`${data.main.temp}°`);
+        feelsLike.append(`체감 온도 : ${(data.main.feels_like).toFixed(1)}°`);
+        maxTemp.append(`최고 온도 : ${(data.main.temp_max).toFixed(1)}°`);
+        minTemp.append(`최저 온도 : ${(data.main.temp_min).toFixed(1)}°`);
+        //icon.innerHTML= `<img src='https://openweathermap.org/img/wn/${weatherIcon}.png'>`;
+
+        currentTime.append(`${month}월 ${day}일 ${hours}시 ${minutes}분`);
+    }
+
+    //날씨에 따라 배경 이미지 전환
+    function loadImg(data) {
+    let background = document.querySelector(".weather-container");
+    let temp = data.weather[0].icon;
+    //let temp = '50n';
+    const season = (url) => {
+        background.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),url(${url})`;
+    };
+
+    if (temp.includes('01')) {
+        return season('./img/clear_sky.jpeg');  
+    }
+    if (temp.includes('02')) {
+        return season('./img/few_clouds.jpeg');  
+    }
+    if (temp.includes('03')) {
+        return season('./img/scattered_clouds2.jpeg'); 
+    }
+    if (temp.includes('04')) {
+        return season('./img/broken_clouds.jpeg'); 
+    }
+    if (temp.includes('09')) {
+        return season('./img/shower_rain.jpeg');  
+    }
+    if (temp.includes('10')) {
+        return season('./img/rain.webp'); 
+    }
+    if (temp.includes('11')) {
+        return season('./img/thunder_storm.png');
+    }
+    if (temp.includes('13')) {
+        return season('./img/snow.webp');
+    }
+    if (temp.includes('50')) {
+        return season('./img/mist.png');
+    }
+
+    console.error(new Error(`${temp}, 배경을 불러오지 못했습니다.`));
+    }
+
+    function dailyClothes(data) {
+    let clothes = document.querySelector(".item-button");
+    let currentTemp = data.main.temp;
+    //let currentTemp = 7;
+
+    let winter = currentTemp <= 4;
+    let earlyWinter = currentTemp >= 5 && currentTemp < 9;
+    let beginWinter = currentTemp >= 9 && currentTemp < 12;
+    let fall = currentTemp >= 12 && currentTemp < 17;
+    let earlyFall = currentTemp >= 17 && currentTemp < 20;
+    let earlySummer = currentTemp >= 20 && currentTemp < 23;
+    let beginSummer = currentTemp >= 23 && currentTemp < 28;
+    let summer = currentTemp >= 28;
+
+    const winterArr = new Array('패딩','두꺼운 코트','목도리','기모의류');
+    const earlyWinterArr = new Array('레글런 코트','가죽자켓','발열내의','니트','레깅스');
+    const beginWinterArr = new Array('자켓','트렌치코트','야상','니트','청바지','기모스타킹');
+    const fallArr = new Array('얇은 니트','맨투맨','가디건','청바지');
+    const earlyFallArr = new Array('얇은 가디건','니티드 스웨터','면바지','청바지');
+    const earlySummerArr = new Array('얇은 가디건','얇은 셔츠','반바지','면바지');
+    const beginSummerArr = new Array('반팔','얇은 셔츠','반바지','면바지');
+    const summerArr = new Array('민소매','반팔','반바지','면바지','원피스');  
+
+
+    if (winter){
+        clothes.innerHTML = `
+        <button class="w-btn w-btn-indigo" type="button">
+        ${winterArr[0]}
+        </button>
+        <button class="w-btn w-btn-green" type="button">
+        ${winterArr[1]}
+        </button>
+        <button class="w-btn w-btn-green2" type="button">
+        ${winterArr[2]}
+        </button>
+        <button class="w-btn w-btn-brown" type="button">
+        ${winterArr[3]}
+        </button>
+        `;
+        getITEM(winterArr);
+    } 
+    else if (earlyWinter){
+        clothes.innerHTML = `
+        <button class="w-btn w-btn-indigo" type="button">
+        ${earlyWinterArr[0]}
+        </button>
+        <button class="w-btn w-btn-green" type="button">
+        ${earlyWinterArr[1]}
+        </button>
+        <button class="w-btn w-btn-green2" type="button">
+        ${earlyWinterArr[2]}
+        </button>
+        <button class="w-btn w-btn-brown" type="button">
+        ${earlyWinterArr[3]}
+        </button>
+        <button class="w-btn w-btn-blue" type="button">
+        ${earlyWinterArr[4]}
+        </button>
+        `;
+        getITEM(earlyWinterArr);
+    }
+    else if (beginWinter){
+        clothes.innerHTML = `
+        <button class="w-btn w-btn-indigo" type="button">
+        ${beginWinterArr[0]}
+        </button>
+        <button class="w-btn w-btn-green" type="button">
+        ${beginWinterArr[1]}
+        </button>
+        <button class="w-btn w-btn-green2" type="button">
+        ${beginWinterArr[2]}
+        </button>
+        <button class="w-btn w-btn-brown" type="button">
+        ${beginWinterArr[3]}
+        </button>
+        <button class="w-btn w-btn-blue" type="button">
+        ${beginWinterArr[4]}
+        </button>
+        <button class="w-btn w-btn-pink" type="button">
+        ${beginWinterArr[5]}
+        </button>
+        `;
+        getITEM(beginWinterArr);
+    }
+    else if (fall){
+        clothes.innerHTML = `
+        <button class="w-btn w-btn-indigo" type="button">
+        ${fallArr[0]}
+        </button>
+        <button class="w-btn w-btn-green" type="button">
+        ${fallArr[1]}
+        </button>
+        <button class="w-btn w-btn-green2" type="button">
+        ${fallArr[2]}
+        </button>
+        <button class="w-btn w-btn-brown" type="button">
+        ${fallArr[3]}
+        </button>
+        `;
+        getITEM(fallArr);
+    }
+    else if (earlyFall){
+        clothes.innerHTML = `
+        <button class="w-btn w-btn-indigo" type="button">
+        ${earlyFallArr[0]}
+        </button>
+        <button class="w-btn w-btn-green" type="button">
+        ${earlyFallArr[1]}
+        </button>
+        <button class="w-btn w-btn-green2" type="button">
+        ${earlyFallArr[2]}
+        </button>
+        <button class="w-btn w-btn-brown" type="button">
+        ${earlyFallArr[3]}
+        </button>
+        `;
+        getITEM(earlyFallArr);
+    }
+    else if (earlySummer){
+        clothes.innerHTML = `
+        <button class="w-btn w-btn-indigo" type="button">
+        ${earlySummerArr[0]}
+        </button>
+        <button class="w-btn w-btn-green" type="button">
+        ${earlySummerArr[1]}
+        </button>
+        <button class="w-btn w-btn-green2" type="button">
+        ${earlySummerArr[2]}
+        </button>
+        <button class="w-btn w-btn-brown" type="button">
+        ${earlySummerArr[3]}
+        </button>
+        `;
+        getITEM(earlySummerArr);
+    }
+    else if (beginSummer){
+        clothes.innerHTML = `
+        <button class="w-btn w-btn-indigo" type="button">
+        ${beginSummerArr[0]}
+        </button>
+        <button class="w-btn w-btn-green" type="button">
+        ${beginSummerArr[1]}
+        </button>
+        <button class="w-btn w-btn-green2" type="button">
+        ${beginSummerArr[2]}
+        </button>
+        <button class="w-btn w-btn-brown" type="button">
+        ${beginSummerArr[3]}
+        </button>
+        `;
+        getITEM(beginSummerArr);
+    }
+    else if (summer){
+        clothes.innerHTML = `
+        <button class="w-btn w-btn-indigo" type="button">
+        ${summerArr[0]}
+        </button>
+        <button class="w-btn w-btn-green" type="button">
+        ${summerArr[1]}
+        </button>
+        <button class="w-btn w-btn-green2" type="button">
+        ${summerArr[2]}
+        </button>
+        <button class="w-btn w-btn-brown" type="button">
+        ${summerArr[3]}
+        </button>
+        <button class="w-btn w-btn-blue" type="button">
+        ${summerArr[4]}
+        </button>
+        `;
+        getITEM(summerArr);
+        }
+    }
+       
+    function getITEM(data){
+        let item = data;
+
+        for(let i = 0; i < 7; i++){
+            document.querySelector(`.div${i}-title`).innerHTML = '';
+            document.querySelector(`.slider-div${i}`).innerHTML = '';
+
+        }
+        
+        for(let i = 0; i < item.length; i++)
+        { 
+            let leng = item.length;
+            $.ajax({
+                type: "GET",
+                url: `http://openapi.11st.co.kr/openapi/OpenApiService.tmall?key=6125632d083f2fd247a68a4f8b8e5b6e&apiCode=ProductSearch&keyword=${item[i]}&sortCd=CP`, 
+                success: function (xml) { 
+                    //console.log(xml);
+                    parseText(xml,i,leng,item);
+                }
+            });
+        }
+    }
+
+        function parseText(xml,i,leng,item) {
+            let name = new Array();
+            let image = new Array();
+            let url = new Array();
+            let j;
+            for(j = 0; j < 5; j++)
+            {
+                name[j] = xml.getElementsByTagName("ProductName")[j].childNodes[0].nodeValue;
+                image[j] = xml.getElementsByTagName("ProductImage150")[j].childNodes[0].nodeValue;
+                url[j] = xml.getElementsByTagName("DetailPageUrl")[j].childNodes[0].nodeValue;
+
+                document.querySelector(`.div${i}-title`).innerHTML = item[i];
+                document.querySelector(`.slider-div${i}`).innerHTML += "<td><a href="+ url[j] +"><div>" + name[j] + "</div><img src=" +image[j]+ "></a></td>";
+            }
+
+            if (i == leng - 1 && j == 5){
+    
+                $('.w-btn-indigo').click(function(){			
+                    let offset = $('.div0-title').offset(); //선택한 태그의 위치를 반환 
+                     //animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함 	        
+                     $('html').animate({scrollTop : offset.top}, 400);		
+                    });
+
+                $('.w-btn-green').click(function(){			
+                    let offset = $('.div1-title').offset(); //선택한 태그의 위치를 반환 
+                     //animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함 	        
+                     $('html').animate({scrollTop : offset.top}, 400);		
+                    });
+    
+                $('.w-btn-green2').click(function(){			
+                    let offset = $('.div2-title').offset(); //선택한 태그의 위치를 반환 
+                     //animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함 	        
+                     $('html').animate({scrollTop : offset.top}, 400);		
+                    });
+
+                $('.w-btn-brown').click(function(){			
+                    let offset = $('.div3-title').offset(); //선택한 태그의 위치를 반환 
+                     //animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함 	        
+                     $('html').animate({scrollTop : offset.top}, 400);		
+                    });
+                
+                $('.w-btn-blue').click(function(){			
+                    let offset = $('.div4-title').offset(); //선택한 태그의 위치를 반환 
+                     //animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함 	        
+                     $('html').animate({scrollTop : offset.top}, 400);		
+                    });
+                
+                $('.w-btn-pink').click(function(){			
+                    let offset = $('.div5-title').offset(); //선택한 태그의 위치를 반환 
+                     //animate()메서드를 이용해서 선택한 태그의 스크롤 위치를 지정해서 0.4초 동안 부드럽게 해당 위치로 이동함 	        
+                     $('html').animate({scrollTop : offset.top}, 400);		
+                    });
+            }
+        }
+    </script>
+    
 </head>
+
 <body>
     <!-- Header -->
 	<div class="container">
 		<header>
-			<h2>오늘의 옷</h2>
+			<img src="./img/logo.png" width="130" style="padding-left:5px;">
 			<nav>
 				<ul>
 					<li onClick="location.href='index.html'">HOME</li>
@@ -27,14 +407,31 @@
     <section class="weather-container">
         <div class="weather-data expandUp">
             <div class="current-time"></div>
-            <div class="location"><class class="fas fa-city"></class></div>
+              <select id='select-location' onchange="selectedControl()">
+                <option value='seoul'>서울</option>
+                <option value='gyeonggi-do'>경기</option>
+                <option value='incheon'>인천</option>
+                <option value='daegu'>대구</option>  
+                <option value='gwangju'>광주</option>  
+                <option value='daejeon'>대전</option>  
+                <option value='ulsan'>울산</option>  
+                <option value='gangwon-do'>강원</option>  
+                <option value='chungcheongbuk-do'>충북</option>  
+                <option value='chungcheongnam-do'>충남</option>  
+                <option value='jeollabuk-do'>전북</option>  
+                <option value='jeollanam-do'>전남</option>  
+                <option value='gyeongsangbuk-do'>경북</option>  
+                <option value='gyeongsangnam-do'>경남</option>  
+                <option value='jeju-do'>제주</option>  
+              </select>
+            <span class="location"><class class="fas fa-city"></class></span>
             <div class="current-temp"> </div>
             <div class="icon"></div>
         </div>
         <div class="weater-temp expandUp">
-            <div class="feels-like">체감 온도 : </div>
-            <div class="max-temp">최고 온도 : </div>
-            <div class="min-temp">최저 온도 : </div>
+            <div class="feels-like"></div>
+            <div class="max-temp"></div>
+            <div class="min-temp"></div>
         </div>
     </section>
 
@@ -43,12 +440,34 @@
         <div class="recommend">
             <div class="recommend-item expandUp">오늘의 추천 아이템은?</div>
             <div class="item-button"></div>
-            <div class="items"></div>
         </div>     
     </nav>
 
     <!-- Article -->
-
-    </div>
+    <table>
+        <th class="div0-title"></th>
+        <tr class="slider-div0">
+        </tr>
+        <th class="div1-title"></th>
+        <tr class="slider-div1">
+        </tr>
+        <th class="div2-title"></th>
+        <tr class="slider-div2">   
+        </tr>
+        <th class="div3-title"></th>
+        <tr class="slider-div3">   
+        </tr>
+        <th class="div4-title"></th>
+        <tr class="slider-div4">   
+        </tr>
+        <th class="div5-title"></th>
+        <tr class="slider-div5">   
+        </tr>
+        <th class="div6-title"></th>
+        <tr class="slider-div6">   
+        </tr>
+    </table>
+</div>
 </body>
 </html>
+

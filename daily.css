@@ -75,7 +75,7 @@ header ul > li:hover {
 	background-size: cover;
 	background-position: 0% 20%;
 	width:100%;
-	height:220px;
+	height:250px;
     display: flex;
 	justify-content: center;
 	align-items: left;
@@ -106,6 +106,7 @@ header ul > li:hover {
 	justify-content: center;
 	padding-top:20px;
 	font-weight: bold;
+	margin-top: 20px;
 }
 
 .item-button {
@@ -183,6 +184,60 @@ button {
     transform: scale(1.5);
 }
 
+
+/* slider */
+
+.div0-title,.div1-title,.div2-title,.div3-title,.div4-title,.div5-title,.div6-title {
+	color: #616161;
+	margin-bottom: 20px;
+	text-decoration: underline;
+}
+/*
+.slider-div0,.slider-div1,.slider-div2,.slider-div3,.slider-div4,.slider-div5,.slider-div6 {
+}*/
+
+/*location dropdown*/
+
+  select {
+	  width: 120px; 
+	  padding: .8em .5em;
+	  margin-bottom: 10px;
+	  border: 1px solid #999;
+	  font-family: inherit;  
+	  background-color: #ddd;
+	  border-radius: 0px; 
+	  -webkit-appearance: none; 
+	  -moz-appearance: none;
+	  appearance: none;
+	}
+
+	td{
+		text-align:center;
+	}
+
+	a{
+		text-decoration-line : none;
+	}
+
+	td a div {
+		margin-left: 20px;
+		width: 250px;
+		display: block;
+		overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+	}
+
+	th {
+		font-size:30px;
+		padding-top: 80px;
+		padding-bottom: 25px;
+		text-align:left;
+	}
+
+
+
+	
 
 
 

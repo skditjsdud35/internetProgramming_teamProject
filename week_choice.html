@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>오늘의 옷</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+
+		var arr = ['서울', '춘천', '강릉', '대전', '청주',
+			'대구', '전주', '광주', '부산', '제주',
+			'중국-베이징', '미국-워싱턴', '영국-런던', '네팔-카트만두', '동티모르-딜리',
+			'태국-방콕', '말레이시아-쿠알라룸푸르', '몰디브-말레', '라오스-비엔티안', '레바논-베이루트',
+			'몽골-울란바토르', '미얀마-네피도', '방글라데시-다카', '베트남-하노이', '부탄-팀부',
+			'대전브루나이-반다르스리브가완', '사우디아라비아-리야드', '시리아-다마스쿠스', '싱가포르', '아르메니아-예레반',
+			'아제르바이잔-바쿠', '아프가니스탄-카불', '예멘-사나', '오만-무스카트', '요르단-암만',
+			'우즈베키스탄-타슈켄트', '이라크-바그다드', '이란-테헤란', '이스라엘-서예루살렘', '인도-뉴델리',
+			'인도네시아-자카르타', '일본-도쿄', '조지아-트빌리시', '캄보디아-프놈펜', '터키-앙카라',
+			'필리핀-마닐라'];
+		var arr_lat = ['37.5683', '37.8747', '37.7525', '36.3333', '36.6372',
+			'35.8', '35.8219', '35.1547', '35.1028', '33.5097',
+			'39.9075', '47.5001', '39.8865', '27.7167', '-8.5586',
+			'13.75', '3.1431', '4.1748', '17.9667', '33.8889',
+			'47.9077', '19.754', '23.7104', '21.0245', '27.4661',
+			'4.9403', '24.6877', '33.5102', '1.2897', '40.1811',
+			'40.3777', '34.5', '15.3547', '23.6139', '31.9552',
+			'41.2646', '33.3406', '35.6944', '31.782', '28.6128',
+			'-6.2146', '35.6895', '41.6941', '11.5625', '39.9199',
+			'14.6042'
+		];
+
+		var arr_long = ['126.9778', '127.7342', '128.876', '127.4167', '127.4897',
+			'128.55', '127.1489', '126.9156', '129.0403', '126.5219',
+			'116.3972', '-120.5015', '-83.4483', '85.3167', '125.5736',
+			'100.5167', '101.6865', '73.5089', '102.6', '35.4944',
+			'106.8832', ' 96.1345', '90.4074', ', 105.8412', '89.6419',
+			'114.9481', '46.7219', '36.2913', '103.8501', '44.5136',
+			'49.892', '69.4167', '44.2067', '58.5922', '35.945',
+			'69.2163', '44.4009', '51.4215', '35.2196', '77.2311',
+			'106.8451', '139.6917', '44.8337', '104.916', '32.8543',
+			'120.9822'
+		];
+		var value1 = localStorage.getItem("value_");
+		//alert(value1);
+		for (var i = 0; i < arr.length; i++) {
+			if (value1 == arr[i]) {
+				var lat = arr_lat[i];
+				var long = arr_long[i];
+				// alert(lat);
+			}
+		}
+		$.getJSON("http://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&appid=658772bf26af38b2ad2b21eb36bb4812&units=metric", function (data) {
+
+			var i = 0;
+			for (var j = 0; j < 40; j = j + 8) {
+				var minTemp = data.list[j].main.temp_min;
+				var maxTemp = data.list[j].main.temp_max;
+				var Temp = data.list[j].main.temp;
+
+				var time = String(data.list[j].dt_txt);
+				var time_split = time.split(" ");
+				var time = time_split[0];
+				var time_split = time.split("-");
+				var time = time_split[1] + time_split[2];
+				//var wIcon= data.list[j].weather[j].icon;
+				//var $now =new Date($.now());
+				//var $cDate=$now.getFullYear()+'/'+($now.getMonth()+1)+'/'+ $now.getDate()+'/'+$now.getHours()+':'+$now.getMinutes();
+				//$('.cdate').prepend($cDate);
+				var table_days =
+					'<P>' + time + '<P>' +
+					'<P>' + 'Temperature: ' + Temp + '°' + '<P>' +
+					'<P>' + 'Max: ' + maxTemp + '°' + '<P>' +
+					'<P>' + 'Min: ' + minTemp + '°' + '<P>';
+				$('.circle' + i).append(table_days);
+				i++;
+				if (i == 3) {
+					if (Temp <= 4) {
+						$('.week_result').append("이번 주는 전체적으로 춥습니다. 패딩, 두꺼운 코트, 목도리등의 기모 의류를 입으시는 것을 추천합니다. ");
+					} else if (Temp <= 9) {
+						$('.week_result').append("이번 주는 조금 쌀쌀합니다. 코트, 가죽자켓, 니트 레깅스 등을 입으시는 것을 추천합니다. ");
+					} else if (Temp <= 12) {
+						$('.week_result').append("이번 주는 바람이 조금 붑니다. 자켓, 트렌치코트, 청바지 등을 입으시는 것을 추천합니다. ");
+					} else if (Temp <= 17) {
+						$('.week_result').append("이번 주는 저녁에 조금 춥습니다. 맨투맨, 가디건, 청바지 등을 입으시는 것을 추천합니다. ");
+					} else if (Temp <= 30) {
+						$('.week_result').append("이번 주는 전체적으로 덥습니다. 반팔, 얇은 셔츠, 반바지 등을 입으시는 것을 추천합니다. ");
+					} else
+						$('.week_result').append("이번주는 많이 덥습니다. 반팔, 반바지 등을 입으시는 것을 추천합니다. ");
+				}
+			}
+			$('.p_tag').prepend(value1);
+
+		});
+
+	</script>
+	<script>
+		const Upper = a => a[0].toUpperCase() + a.substring(1, a.length);
+		window.onload = () => {
+			const circle0 = document.getElementsByClassName('circle0')[0];
+			const circle1 = document.getElementsByClassName('circle1')[0];
+			const circle2 = document.getElementsByClassName('circle2')[0];
+			const circle3 = document.getElementsByClassName('circle3')[0];
+			const circle4 = document.getElementsByClassName('circle4')[0];
+			const ani = (element, dir1, dir2, interval, size) => {
+				const _dir1 = `offset${Upper(dir1)}`;
+				const _dir2 = `offset${Upper(dir2)}`;
+				let initDir1Size = element[_dir1] || 0;
+				let initDir2Size = element[_dir2] || 0;
+				const eH = element.offsetHeight;
+				let flag = 1;
+				let cnt = 0;
+				setInterval(() => {
+					element.style[dir1] = `${initDir1Size}px`
+					element.style[dir2] = `${initDir2Size}px`
+					initDir1Size += size * flag;
+					initDir2Size += size * flag;
+					if (initDir1Size >= window.innerHeight - eH - 150 || initDir1Size < 0 || initDir2Size >= window.innerWidth - eH - 200 || initDir2Size < 0) flag *= -1;
+				}, interval)
+			}
+			ani(circle0, 'top', 'right', 5, 0.25);
+			ani(circle1, 'top', 'right', 5, 0.2);
+			ani(circle2, 'top', 'right', 5, 0.27);
+			ani(circle3, 'top', 'right', 5, 0.21);
+			ani(circle4, 'top', 'right', 5, 0.32);
+		}
+		$(function () {
+			$('.bg2').click(function () {
+				$(".circle0").css("background-image", "linear-gradient(to right, #fa709a 0%, #fee140 100%)");
+				$(".circle1").css("background-image", "linear-gradient(to top, #d9afd9 0%, #97d9e1 100%)");
+				$(".circle2").css("background-image", "linear-gradient(to right, #74ebd5 0%, #9face6 100%)");
+				$(".circle3").css("background-image", "linear-gradient(to top, #9795f0 0%, #fbc8d4 100%)");
+				$(".circle4").css("background-image", "linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%)");
+
+			});
+			$('.bg1').click(function () {
+				$(".circle0").css("background-image", "linear-gradient(to top, #fff1eb 0%, #ace0f9 100%)");
+				$(".circle1").css("background-image", "linear-gradient(to top, #fff1eb 0%, #ace0f9 100%)");
+				$(".circle2").css("background-image", "linear-gradient(to top, #fff1eb 0%, #ace0f9 100%)");
+				$(".circle3").css("background-image", "linear-gradient(to top, #fff1eb 0%, #ace0f9 100%)");
+				$(".circle4").css("background-image", "linear-gradient(to top, #fff1eb 0%, #ace0f9 100%)");
+			});
+		});
+	</script>
+	<style>
+    
+		.circle0 {
+			letter-spacing: 3px;
+			font-size: 25px;
+			font-weight: bold;
+			position: absolute;
+			text-align: center;
+			top: 40px;
+			left: 120px;
+			width: 250px;
+			height: 250px;
+			border-radius: 50%;
+			opacity: 0.88;
+			background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+
+		}
+
+		.circle1 {
+			letter-spacing: 3px;
+			font-size: 25px;
+			font-weight: bold;
+			text-align: center;
+			position: absolute;
+			top: 180px;
+			left: 355px;
+			width: 250px;
+			height: 250px;
+			border-radius: 50%;
+			opacity: 0.88;
+			background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+		}
+
+		.circle2 {
+			letter-spacing: 3px;
+			font-size: 25px;
+			font-weight: bold;
+			text-align: center;
+			position: absolute;
+			top: 200px;
+			left: 600px;
+			width: 250px;
+			height: 250px;
+			border-radius: 50%;
+			opacity: 0.88;
+			background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+		}
+
+		.circle3 {
+			letter-spacing: 3px;
+			font-size: 25px;
+			font-weight: bold;
+			text-align: center;
+			position: absolute;
+			top: 180px;
+			left: 850px;
+			width: 250px;
+			height: 250px;
+			border-radius: 50%;
+			opacity: 0.88;
+			background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+		}
+
+		.circle4 {
+			letter-spacing: 3px;
+			font-size: 25px;
+			font-weight: bold;
+			text-align: center;
+			position: absolute;
+			top: 180px;
+			left: 1100px;
+			width: 250px;
+			height: 250px;
+			border-radius: 50%;
+			opacity: 0.88;
+			background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+		}
+
+		.p_tag {
+			left: 370px;
+			top: 50px;
+			font-size: 40px;
+			position: absolute;
+			font-weight: bold;
+			text-align: center;
+			position: absolute;
+		}
+
+		.p_bg {
+			left: 1150px;
+			top: 50px;
+			font-size: 15px;
+			position: absolute;
+			font-weight: bold;
+			text-align: center;
+			position: absolute;
+		}
+
+		.bg1 {
+			position: absolute;
+			border-radius: 50px;
+			width: 50px;
+			height: 50px;
+			top: 50px;
+			left: 1230px;
+			background-color: white;
+			color: black;
+			border: 2px solid #ace0f9;
+		}
+
+		.bg2 {
+			position: absolute;
+			border-radius: 50px;
+			width: 50px;
+			height: 50px;
+			top: 50px;
+			left: 1300px;
+			background-color: white;
+			color: black;
+			border: 2px solid #ace0f9;
+		}
+
+		.bg1:hover {
+			background-color: #ace0f9;
+			color: white;
+		}
+
+		.bg2:hover {
+			background-color: #ace0f9;
+			color: white;
+		}
+
+		.center {
+			background-color:#F9F8EF;
+			background-size: cover;
+			background-position: 0% 20%;
+			margin-left: 20px;
+			margin-right: 20px;
+			width: 1400px;
+			height:700px;
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+		}
+
+		.week_result {
+			position: absolute;
+			left: 200px;
+			top: 600px;
+			font-size: 20px;
+			color: #616161;
+			font-family: 'Playfair Display', sans-serif;
+			box-sizing: border-box;
+			position: absolute;
+			border: 2px solid #616161;
+			border-radius: 5px;
+			width: 1000px;
+			padding: 8px 12px;
+			text-align: center;
+			text-decoration: none;
+			margin: 4px 2px;
+
+		}
+
+		.back {
+			position: absolute;
+			border-radius: 50px;
+			width: 50px;
+			height: 50px;
+			top: 50px;
+			left: 50px;
+			background-color: white;
+			color: black;
+			border: 2px solid #b4c9c2;
+		}
+
+		.back:hover {
+			background-color: #b4c9c2;
+			color: white;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<header>
+			<img src="./img/logo.png" width="130" style="padding-left:5px;">
+			<nav>
+				<ul>
+					<li onClick="location.href='index.html'">HOME</li>
+					<li onClick="location.href='daily.html'">DAILY</li>
+					<li onClick="location.href='weekly.html'">WEEKLY</li>
+					<li onClick="location.href='trends.html'">2022 S/S FASHION TRENDS</li>
+				</ul>
+			</nav>
+		</header>
+	</div>
+
+	<body>
+		<div class="center">
+			<div>
+				<button class="back" onClick="location.href='weekly.html'">Back</button>
+				<p class="p_tag">'s weather</p>
+				<p class="p_bg">Theme:</p>
+				<button class="bg1">Basic</button>
+				<button class="bg2">Color</button>
+			</div>
+			<div class="circle0">
+			</div>
+			<div class="circle1">
+			</div>
+			<div class="circle2">
+			</div>
+			<div class="circle3">
+			</div>
+			<div class="circle4">
+			</div>
+			<p class="week_result"></p>
+		</div>
+	</body>
+
+</body>
+
+</html>

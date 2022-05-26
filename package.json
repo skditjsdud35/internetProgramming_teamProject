@@ -5,6 +5,9 @@
     "export": "^0.1.337",
     "express": "^4.18.1",
     "request": "^2.88.2",
+    "slick-carousel": "^1.8.1",
+    "swiper": "^8.1.6",
+    "xml-js": "^1.6.11",
     "yarn": "^1.22.18"
   }
 }
