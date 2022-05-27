@@ -45,6 +45,10 @@
         let selectValue = locationSelect.options[locationSelect.selectedIndex].value; 
         let selectText = locationSelect.options[locationSelect.selectedIndex].text;
 
+        let sortSelect = document.getElementById('select-sort');  //select box
+        let selectValue2 = sortSelect.options[sortSelect.selectedIndex].value; 
+       
+
         getJSON(`http://api.openweathermap.org/data/2.5/weather?q=${selectValue}&appid=92e1a79652b2d6263924d1f105522a8c&units=metric`,
         function(err, data) {
         if (err !== null) {
@@ -52,7 +56,7 @@
         } else {
             loadWeather(data);
             loadImg(data);
-            dailyClothes(data);
+            dailyClothes(data,selectValue2);
             
         }
     });
@@ -133,7 +137,7 @@
     console.error(new Error(`${temp}, 배경을 불러오지 못했습니다.`));
     }
 
-    function dailyClothes(data) {
+    function dailyClothes(data,selectValue2) {
     let clothes = document.querySelector(".item-button");
     let currentTemp = data.main.temp;
     //let currentTemp = 7;
@@ -172,7 +176,7 @@
         ${winterArr[3]}
         </button>
         `;
-        getITEM(winterArr);
+        getITEM(winterArr,selectValue2);
     } 
     else if (earlyWinter){
         clothes.innerHTML = `
@@ -192,7 +196,7 @@
         ${earlyWinterArr[4]}
         </button>
         `;
-        getITEM(earlyWinterArr);
+        getITEM(earlyWinterArr,selectValue2);
     }
     else if (beginWinter){
         clothes.innerHTML = `
@@ -215,7 +219,7 @@
         ${beginWinterArr[5]}
         </button>
         `;
-        getITEM(beginWinterArr);
+        getITEM(beginWinterArr,selectValue2);
     }
     else if (fall){
         clothes.innerHTML = `
@@ -232,7 +236,7 @@
         ${fallArr[3]}
         </button>
         `;
-        getITEM(fallArr);
+        getITEM(fallArr,selectValue2);
     }
     else if (earlyFall){
         clothes.innerHTML = `
@@ -249,7 +253,7 @@
         ${earlyFallArr[3]}
         </button>
         `;
-        getITEM(earlyFallArr);
+        getITEM(earlyFallArr,selectValue2);
     }
     else if (earlySummer){
         clothes.innerHTML = `
@@ -266,7 +270,7 @@
         ${earlySummerArr[3]}
         </button>
         `;
-        getITEM(earlySummerArr);
+        getITEM(earlySummerArr,selectValue2);
     }
     else if (beginSummer){
         clothes.innerHTML = `
@@ -283,7 +287,7 @@
         ${beginSummerArr[3]}
         </button>
         `;
-        getITEM(beginSummerArr);
+        getITEM(beginSummerArr,selectValue2);
     }
     else if (summer){
         clothes.innerHTML = `
@@ -303,25 +307,26 @@
         ${summerArr[4]}
         </button>
         `;
-        getITEM(summerArr);
+        getITEM(summerArr,selectValue2);
         }
     }
        
-    function getITEM(data){
+    function getITEM(data,selectValue2){
         let item = data;
+        let sort = selectValue2;
 
         for(let i = 0; i < 7; i++){
             document.querySelector(`.div${i}-title`).innerHTML = '';
             document.querySelector(`.slider-div${i}`).innerHTML = '';
 
         }
-        
+
         for(let i = 0; i < item.length; i++)
         { 
             let leng = item.length;
             $.ajax({
                 type: "GET",
-                url: `http://openapi.11st.co.kr/openapi/OpenApiService.tmall?key=6125632d083f2fd247a68a4f8b8e5b6e&apiCode=ProductSearch&keyword=${item[i]}&sortCd=CP`, 
+                url: `http://openapi.11st.co.kr/openapi/OpenApiService.tmall?key=6125632d083f2fd247a68a4f8b8e5b6e&apiCode=ProductSearch&keyword=${item[i]}&sortCd=${sort}`, 
                 success: function (xml) { 
                     //console.log(xml);
                     parseText(xml,i,leng,item);
@@ -440,6 +445,15 @@
         <div class="recommend">
             <div class="recommend-item expandUp">오늘의 추천 아이템은?</div>
             <div class="item-button"></div>
+            <select id='select-sort' onchange="selectedControl()">
+                <option value='CP'>인기도순</option>
+                <option value='A'>누적판매순</option>
+                <option value='G'>평가높은순</option>
+                <option value='I'>후기/리뷰많은순</option>  
+                <option value='L'>낮은가격순</option>  
+                <option value='H'>높은가격순</option>  
+                <option value='N'>최근등록순</option>  
+            </select>
         </div>     
     </nav>
 
